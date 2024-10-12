@@ -48,7 +48,7 @@
 <body>
     <img src="https://cdn.podimo.com/images/20f436b3-769c-426f-b0bd-08848f505163_400x400.png" alt="Logo" style="width: 200px; height: 200px;">
     
-    <h1>Práctica Calificada 2 (Previa)</h1>
+    <h1>Práctica Calificada 2 (Actualizado)</h1>
     <h2>Asignatura: Base de Datos 1</h2>
     
     <div id="timer">Tiempo restante: 90:00</div>
@@ -279,6 +279,45 @@ WHERE PacienteID <= 5;
         <li>Eliminar todas las citas que estén programadas para fechas pasadas (usar la función CURDATE()).</li>
         <li>Crear una consulta que muestre el nombre de la especialidad y el número de médicos en cada especialidad, pero solo para especialidades que tengan más de 2 médicos.</li>
         <li>Escribir una consulta que muestre el nombre completo de los pacientes y su edad (calculada a partir de la fecha de nacimiento), solo para pacientes mayores de 40 años.</li>
+    </ol>
+
+    <h2 class="instructions">Instrucciones Avanzadas para Alumnos</h2>
+    <p>A continuación se presentan ejemplos de consultas avanzadas utilizando diferentes tipos de JOIN, seguidos de 5 enunciados adicionales que deben resolver. Estos ejercicios tienen un mayor nivel de complejidad y se centran en el uso de CROSS JOIN, INNER JOIN, LEFT JOIN y RIGHT JOIN.</p>
+
+    <h3>Ejemplos de Consultas Avanzadas</h3>
+
+    <div class="exercise">
+        <h4>Ejemplo 1: INNER JOIN</h4>
+        <pre><code>
+SELECT Pacientes.Nombre, Pacientes.Apellido, Citas.FechaCita, Medicos.Nombre AS NombreMedico, Especialidades.NombreEspecialidad
+FROM Citas
+INNER JOIN Pacientes ON Citas.PacienteID = Pacientes.PacienteID
+INNER JOIN Medicos ON Citas.MedicoID = Medicos.MedicoID
+INNER JOIN Especialidades ON Medicos.EspecialidadID = Especialidades.EspecialidadID
+WHERE Citas.FechaCita >= CURDATE() AND Citas.FechaCita < DATE_ADD(CURDATE(), INTERVAL 7 DAY);
+        </code></pre>
+        <p><strong>Explicación:</strong> Esta consulta utiliza INNER JOIN para combinar información de cuatro tablas (Citas, Pacientes, Médicos y Especialidades). Muestra las citas programadas para los próximos 7 días, incluyendo el nombre del paciente, la fecha de la cita, el nombre del médico y su especialidad. El INNER JOIN asegura que solo se incluyan las filas que tienen coincidencias en todas las tablas relacionadas.</p>
+    </div>
+
+    <div class="exercise">
+        <h4>Ejemplo 2: LEFT JOIN</h4>
+        <pre><code>
+SELECT Pacientes.Nombre, Pacientes.Apellido, Citas.FechaCita, Medicos.Nombre AS NombreMedico
+FROM Pacientes
+LEFT JOIN Citas ON Pacientes.PacienteID = Citas.PacienteID
+LEFT JOIN Medicos ON Citas.MedicoID = Medicos.MedicoID
+WHERE Citas.CitaID IS NULL OR Citas.FechaCita < CURDATE();
+        </code></pre>
+        <p><strong>Explicación:</strong> Esta consulta utiliza LEFT JOIN para mostrar todos los pacientes, incluyendo aquellos que no tienen citas programadas o cuyas citas ya han pasado. El LEFT JOIN asegura que se incluyan todos los pacientes, incluso si no tienen coincidencias en las tablas Citas o Médicos. La condición en el WHERE filtra para mostrar solo pacientes sin citas o con citas pasadas.</p>
+    </div>
+
+    <h3>Enunciados Avanzados</h3>
+    <ol>
+        <li><strong>CROSS JOIN (2 puntos):</strong> Escribir una consulta que genere todas las posibles combinaciones de médicos y especialidades, incluso si el médico no está asignado a esa especialidad. Mostrar el nombre del médico, su especialidad actual y el nombre de todas las especialidades.</li>
+        <li><strong>INNER JOIN (2 puntos):</strong> Crear una consulta que muestre el nombre del paciente, el nombre del médico, la especialidad y la fecha de la cita para todas las citas programadas en el último mes. Incluir solo las citas donde el médico y el paciente sean de la misma ciudad.</li>
+        <li><strong>LEFT JOIN (2 puntos):</strong> Escribir una consulta que muestre todos los departamentos y el número de médicos en cada departamento. Incluir departamentos que no tengan médicos asignados.</li>
+        <li><strong>RIGHT JOIN (2 puntos):</strong> Crear una consulta que muestre todas las especialidades y el número de citas programadas para cada especialidad en el próximo mes. Incluir especialidades que no tengan citas programadas.</li>
+        <li><strong>Combinación de JOINs (2 puntos):</strong> Escribir una consulta que muestre el nombre del paciente, el nombre del médico, la especialidad, el departamento y la fecha de la última cita para cada paciente. Incluir pacientes que nunca han tenido una cita y médicos que nunca han atendido a un paciente.</li>
     </ol>
 
     <script>
